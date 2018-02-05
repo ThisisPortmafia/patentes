@@ -1,0 +1,144 @@
+﻿
+function getChartData(url, nombreEmpresa)
+{
+    $.ajax({
+        type: 'GET',
+        url: url,
+        datatype: 'jsonp',
+        contentType: 'application/json',
+        crossdomain: true,
+        success: function (response) {
+            createStockChart(nombreEmpresa, JSON.parse(response).data)
+        },
+        error: function (response) {
+            console.log(response.error);
+        }
+    });
+}
+
+function createStockChart(nombreEmpresa, chartData)
+{
+    var chart = new AmCharts.AmStockChart();
+    chart.type = "stock";
+    chart.pathToImages = "/js/amcharts/images/";
+    chart.fontFamily = "Arial";
+    chart.useUTC = true;
+
+    var categoryAxesSettings = new AmCharts.CategoryAxesSettings();
+    categoryAxesSettings.minPeriod = "hh";
+    categoryAxesSettings.equalSpacing = true;
+    categoryAxesSettings.groupToPeriods = ["hh", "DD", "WW", "MM", "YYYY"];
+    chart.categoryAxesSettings = categoryAxesSettings;
+    chart.chartCursorSettings.valueBalloonsEnabled = true;
+
+    // DATASET //////////////////////////////////////////
+    var dataSet = new AmCharts.DataSet();
+    dataSet.fieldMappings = [{
+        fromField: "precioCierreAnterior",
+        toField: "open"
+    }, {
+        fromField: "precioCierre",
+        toField: "close"
+    }, {
+        fromField: "volumen",
+        toField: "volume"
+    }, {
+        fromField: "precioCierre",
+        toField: "value"
+    }];
+    dataSet.color = "#7f8da9";
+    dataSet.dataProvider = chartData;
+    dataSet.title = nombreEmpresa;
+    dataSet.categoryField = "fechaConsumido";
+
+    chart.dataSets = [dataSet];
+
+    // PANELS ///////////////////////////////////////////
+    var stockPanel = new AmCharts.StockPanel();
+    stockPanel.fontFamily = "Arial";
+    stockPanel.title = "Valor";
+    stockPanel.showCategoryAxis = true;
+    stockPanel.percentHeight = 70;
+
+    var valueAxis = new AmCharts.ValueAxis();
+    valueAxis.autoGridCount = false;
+    stockPanel.addValueAxis(valueAxis);
+
+    // graph of first stock panel
+    var graph = new AmCharts.StockGraph();
+    graph.type = "line";
+    graph.openField = "open";
+    graph.closeField = "close";
+    graph.highField = "high";
+    graph.lowField = "low";
+    graph.valueField = "close";
+    graph.lineColor = "#7f8da9";
+    graph.fillColors = "#7f8da9";
+    graph.negativeLineColor = "#db4c3c";
+    graph.negativeFillColors = "#db4c3c";
+    graph.lineThickness = 3;
+    graph.useDataSetColors = false;
+    graph.comparable = true;
+    graph.compareField = "value";
+    graph.showBalloon = true;
+    graph.balloonText = "[[close]]";
+
+    stockPanel.addStockGraph(graph);
+
+    var stockLegend = new AmCharts.StockLegend();
+    stockLegend.valueText = "";
+    stockPanel.stockLegend = stockLegend;
+
+    stockPanel.categoryAxis.parseDates = true;
+    stockPanel.categoryAxis.dateFormats = [
+        { period: 'hh', format: 'JJ:NN' },
+        { period: 'DD', format: 'MMM DD' },
+        { period: 'WW', format: 'MMM DD' },
+        { period: 'MM', format: 'MMM' },
+        { period: 'YYYY', format: 'YYYY' }];
+
+    chart.panels = [stockPanel];
+
+    chart.chartScrollbarSettings.enabled = false;
+
+    // PERIOD SELECTOR ///////////////////////////////////
+    var periodSelector = new AmCharts.PeriodSelector();
+    periodSelector.position = "bottom";
+    periodSelector.hideOutOfScopePeriods = false;
+    periodSelector.inputFieldsEnabled = false;
+    periodSelector.periods = [{
+        period: "DD",
+        selected: true,
+        count: -1,
+        label: "Hoy"
+    }, {
+        period: "DD",
+        count: 7,
+        label: "1 Semana"
+    }, {
+        period: "MM",
+        count: 1,
+        label: "1 Mes"
+    }, {
+        period: "MM",
+        count: 6,
+        label: "6 Meses"
+    }, {
+        period: "YYYY",
+        count: 1,
+        label: "1 Año"
+    }, {
+        period: "YTD",
+        label: "Este año"
+    }
+    /*
+    , {
+        period: "MAX",
+        label: "MAX"
+    }
+    */
+    ];
+    chart.periodSelector = periodSelector;
+
+    chart.write('chartdiv' + nombreEmpresa);
+}

@@ -1,0 +1,162 @@
+//onCxReadUserProfile();
+
+function onCxReadUserProfile() {	
+	var data = cX.getCookie('cx_user_profile2');
+	var cxProfileTimeout = cX.getCookie('cx_profile_timeout');
+	var cX_url = 'https://api.cxense.com/persisted/execute';
+	var cX_persisted = 'e2af80f612bfed112c0f5b9b1810da907bc8dec3';
+	var cX_json = JSON.stringify( { id: cX.getUserId() } );
+	var cookieValidIntervalInHours = 12; 
+	var cookieTimeout = cookieValidIntervalInHours * 1000 * 60 * 60;
+
+	if ((data == null) || (!data.trim()) || (cxProfileTimeout == null) || (new Date().getTime() - cxProfileTimeout > cookieTimeout))
+	{
+		//console.log("Requesting profile from cxense API");		
+
+		cX.setCookie('cx_profile_timeout', new Date().getTime(), 365);
+		if (data != null) CxGotUserProfileData(data);
+		
+		$.ajax({
+			async: true,
+			type: 'POST',
+			url: cX_url,
+			dataType: 'jsonp',
+			data: {
+				persisted: cX_persisted,
+				json: cX_json
+			}
+		}).done(function (data) {
+			onPersistUserProfileAndProcessRequest(data);
+		}).fail(function () {
+			cXenseCookieErrorValues("profileError");
+		});
+		
+	}
+	else
+	{
+		//console.log("Requesting profile from persited COOKIE");
+		CxGotUserProfileData(data);
+	}			
+}
+
+function onPersistUserProfileAndProcessRequest (data)
+{
+	var cookieExpirationPeriodInDays= (typeof cx_cookieExpirationPeriodInDays !== 'undefined')? cx_cookieExpirationPeriodInDays : 0.0833333333328;
+	
+	cX.setCookie('cx_http_status', data.httpStatus, 365); 
+	if (data.httpStatus == 200)
+	{		
+		try {
+			
+			if (data.response == null)
+			{
+				cX.setCookie('cx_http_status', "response=null", 365); 
+				return;
+			}
+			
+			if (data.response.profile == null)
+			{
+				cX.setCookie('cx_http_status', "profile=null", 365); 
+				return;
+			}
+			if (data.response.profile.length == 0 ) {
+				cX.setCookie('cx_http_status', "profileEmpty", 365); 
+				return;				
+			}
+
+			
+		} catch (err)
+		{
+			cX.setCookie('cx_http_status', "RespExce", 365); 
+		}		
+		
+		try
+		{
+			//User profile was successfully retrieved from server
+			parseAndStorageProfileData(data);
+		} catch (err)
+		{
+			cX.setCookie('cx_http_status', "ParseExce", 365); 
+		}		
+	}
+	else
+	{	 
+		console.log("cXense. Failed to retrieve USER PROFILE");
+	}	
+}
+
+function parseAndStorageProfileData (data)
+{
+	if (data.httpStatus != 200){
+		cXenseCookieErrorValues("profileError");
+	}
+	else{
+
+		var arrItem = new Array();
+		try {
+			jQuery.each(data.response.profile, function (i, node) {
+				var firstValue = node.item.split('/', 1);
+				if (arrItem.indexOf(firstValue) == -1) {
+					arrItem += firstValue;
+					arrItem += '|';
+				}
+			});
+			
+			cX.setCookie('cx_user_profile2', arrItem, 365); 				
+			CxGotUserProfileData(arrItem);
+		}
+		catch(err) {
+			console.log("cXense parseError: " + err.message);
+			cXenseCookieErrorValues("parseError");
+		}
+	}
+}
+
+// This function handles user profiles:
+function CxGotUserProfileData(arrItem) {	
+	var keyscXense = "";
+	var keyscXenseEplanningV3 = "";
+	if (arrItem.length > 0){
+		keyscXense = arrItem.substring(0, arrItem.length - 1);
+		keyscXenseEplanningV3 = "kw_preferences=|" + arrItem.substring(0, arrItem.length - 1);
+	}
+	var keywordscXense = { preferences: keyscXense };
+
+	var keywordsEplanning = readCookie('keywordsEplanning');
+	if (keywordsEplanning) {
+		keywordsEplanning = JSON.parse(keywordsEplanning);
+		keywordsEplanning = mergeObjects(keywordscXense, keywordsEplanning);
+	}
+	else {
+		keywordsEplanning = keywordscXense;
+	}
+	createCookie('keywordsEplanning', JSON.stringify(keywordsEplanning));
+
+	var keywordsEplanningV3 = readCookie('keywordsEplanningV3');
+	if (keywordsEplanningV3) {
+		var ipositionPreferences = keywordsEplanningV3.indexOf('&kw_preferences');
+		if (ipositionPreferences != -1){
+			keywordsEplanningV3 = keywordsEplanningV3.substring(0, ipositionPreferences)
+		}
+		keywordsEplanningV3 = keywordsEplanningV3 + '&' + keyscXenseEplanningV3;
+	}
+	else {
+		keywordsEplanningV3 = keyscXenseEplanningV3;
+	}
+	createCookie('keyscXenseEplanningV3', keyscXenseEplanningV3, 2592000); //Se mantiene por 30 dias solicitud expresa de cXense.
+	createCookie('keywordsEplanningV3', keywordsEplanningV3);
+}
+
+function cXenseCookieErrorValues(keyword){
+	var keyscXense = keyword;
+	var keywordscXense = { preferences: keyscXense };
+	var keywordsEplanning = readCookie('keywordsEplanning');
+	if (keywordsEplanning) {
+		keywordsEplanning = JSON.parse(keywordsEplanning);
+		keywordsEplanning = mergeObjects(keywordscXense, keywordsEplanning);
+	}
+	else {
+		keywordsEplanning = keywordscXense;
+	}
+	createCookie('keywordsEplanning', JSON.stringify(keywordsEplanning));
+}

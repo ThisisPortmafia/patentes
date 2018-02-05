@@ -1,0 +1,83 @@
+﻿
+function AjaxList(settings) {
+
+    this.firstPageLoaded = settings.firstPageLoaded || false;
+    this.containerId = settings.containerId || null;
+    this.templateId = settings.templateId || null;
+    this.totalItems = settings.totalItems || -1;
+    this.pageSize = settings.pageSize || 10;
+    this.title = settings.title || "";
+    this.onPageChanging = settings.onPageChanging || null;
+
+    if (this.templateId == null || this.containerId == null) {
+        console.log("Template and Container Ids must be specified");
+        return;
+    }
+
+    this.pager = {};
+    this.pager.parent = this;
+    this.pager.lastIndexRequested = -1;
+    this.pager.currentData = new Array();
+    this.goToPage = function (pageIndex) {
+        this.pager.lastIndexRequested = pageIndex;
+        this.onPageChanging(this);
+    };
+
+    this.pager.paint = function () 
+    {
+        var totalPages = parseInt(Math.ceil(this.parent.totalItems / parseFloat(this.parent.pageSize)));
+        var start = this.lastIndexRequested - 5;
+        var next;
+        if (start < 0) start = 0;
+
+        var end = (start + 10 > totalPages ? totalPages : start + 10);
+        var containerId = "#" + this.parent.containerId;
+        var header = $("<header class='articles-row-header column'></header>");
+        $(header).append("<h4 class='panel-h left'>" + this.parent.title + "</h4>");
+        var pager = $("<ul class='pagination right'></ul>");
+        var firstPage = $("<li class='arrow' pageIndex='0'><a><span class='icon-first'></span></a>");
+        var lastPage = $("<li class='arrow' pageIndex='" + (totalPages - 1) + "'><a><span class='icon-last'></span></a>");
+
+        var previous = $("<li class='arrow' pageIndex='" + (parseInt(this.lastIndexRequested) - 1) + "'><a><span class='icon-previous'></span></a></li>");
+        if (this.lastIndexRequested > 0) {
+            $(pager).append(firstPage);
+            $(pager).append(previous);
+        }
+        for (var i = start; i < end; i++) 
+        {
+            var style = (i == this.lastIndexRequested) ? "class='current'" : "";
+            var nPage = $("<li " + style + " pageIndex='" + i + "'><a>" + (i + 1) + "</a></li>");
+            $(pager).append(nPage);
+        }
+
+        if (parseInt(this.lastIndexRequested) < (totalPages - 1)) 
+        {
+            next = $("<li class='arrow' pageIndex='" + (parseInt(this.lastIndexRequested) + 1) + "'><a><span class='icon-next'></span></a></li>");
+            $(pager).append(next);
+            $(pager).append(lastPage);
+        }
+        
+
+        
+        $(header).append(pager);
+        $(containerId).prepend(header);
+        $(containerId).append($(header).clone());
+        var lis = $(containerId + " .pagination li");
+        $.each(lis, $.proxy(function (index, element)
+        {
+            $(element).click($.proxy(this.goToPage, this, $(element).attr("pageIndex")));
+        }, this.parent));
+    };
+
+    this.setData = function (html) {
+        var container = $("#" + this.containerId);
+        $(container).html("");
+        $(container).html(html);
+        $.proxy(this.pager.paint(), this);
+    };
+
+    if (this.firstPageLoaded) {
+        this.pager.lastIndexRequested = 0;
+        this.pager.paint();
+    }
+}

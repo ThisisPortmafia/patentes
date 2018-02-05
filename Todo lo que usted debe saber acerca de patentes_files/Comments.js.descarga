@@ -1,0 +1,382 @@
+﻿
+function AddComment() {
+    userId = $("#userId").val()
+    siteId = $("#siteId").val()
+    if (userId == 0 || userId == null || siteId == 0 || siteId == null)
+        return
+    if ($("#comment").val() == null || $("#comment").val() == "")
+        return;
+    var Url = GetIrisUrl();
+    $(".widget-body").addClass("loading");
+    $.ajax({
+        type: 'GET',
+        url: '/community/addcomment',
+        dataType: 'json',
+        contentType: 'application/javascript',
+        data: {
+            UserId: userId,
+            ItemId: $("#itemId").val(),
+            ApplicationId: siteId,
+            Content: $("#comment").val(),
+            Active: true
+        },
+        success: function (response) {
+            $(".widget-body").removeClass("loading");
+            switch (response.Status) {
+                case 0:
+                    $("#TileConfirm").html("Error")
+                    $("#DescriptionConfirm").html(response.Message)
+                    $('#confirmComment').foundation('reveal', 'open');
+                    break;
+                case 1:
+                    $("#TileConfirm").html("Gracias")
+                    $("#DescriptionConfirm").html(response.Message)
+                    Content: $("#comment").val(""),
+                    $('#confirmComment').foundation('reveal', 'open');
+                    GetCommentsByItemIdNoCaching();
+                    break;
+                case -1:
+                    alert(response.Message);
+            }
+
+        },
+        error: function (response) {
+            $(".widget-body").removeClass("loading");
+            console.log(response.error);
+        }
+    });
+}
+
+
+function AddAnswer(parentId) {
+    userId = $("#userId").val()
+    siteId = $("#siteId").val()
+    debugger;
+    if (userId == 0 || userId == null || siteId == 0 || siteId == null)
+        return
+    if ($("#AnswerComment-" + parentId).val() == null || $("#AnswerComment-" + parentId).val() == "")
+        return;
+    var Url = GetIrisUrl();
+    $(".widget-body").addClass("loading");
+    $.ajax({
+        type: 'GET',
+        url: '/community/addcomment',
+        dataType: 'json',
+        contentType: 'application/javascript',
+        data: {
+            UserId: userId,
+            ItemId: $("#itemId").val(),
+            ApplicationId: siteId,
+            Content: $("#AnswerComment-" + parentId).val(),
+            Active: true,
+            ParentId: parentId
+        },
+        success: function (response) {
+            $(".widget-body").removeClass("loading");
+            switch (response.Status) {
+                case 0:
+                    $("#TileConfirm").html("Error")
+                    $("#DescriptionConfirm").html(response.Message)
+                    $('#confirmComment').foundation('reveal', 'open');
+                    break;
+                case 1:
+                    $("#TileConfirm").html("Gracias")
+                    $("#DescriptionConfirm").html(response.Message)
+                    $("#AnswerComment-" + parentId).val("");
+                    $('#confirmComment').foundation('reveal', 'open');
+                    GetCommentsByItemIdNoCaching();
+                    break;
+                case -1:
+                    alert(response.Message);
+            }
+
+        },
+        error: function (response) {
+            $(".widget-body").removeClass("loading");
+            console.log(response.error);
+        }
+    });
+}
+
+
+function GetCommentsByItemIdNoCaching() {
+    var Url = GetIrisUrl();
+    $.ajax({
+        type: 'GET',
+        url: '/community/getcommentsbyitemid',
+        dataType: 'json',
+        contentType: 'application/javascript',
+        data: {
+            IdApp: $("#siteId").val(),
+            ItemId: $("#itemId").val(),
+            Psize: 10,
+            Pindex: 0,
+            rando:Math.random()
+        },
+        success: function (response) {
+            $.ajax({
+                type: 'POST',
+                url: '/Comments/CommentsByItem',
+                data: {
+                    response: JSON.stringify(response.Data)
+                },
+                success: function (response) {
+                    $("#DisplayComments").html(response.Html);
+                    paintPagination(Pindex, 10, response.Total, 'GetCommentsByItemId', "comentarios");
+                    //Comments on new Video Landing
+                    try {
+                        var NumberComments = $("span.count").text();
+                        if (isVideo == true) {
+                            $("#DisplayComments").hide();
+                            $("#commentsVideoContainer a").first().text(NumberComments + " Comentarios")
+                        }
+
+                        $(".btComentariosOpinion > label").html(NumberComments + " Comentarios")
+                    } catch (e) {
+
+                    }
+                },
+                async: false,
+                error: function (response) {
+                    console.log(response.error);
+                }
+            });
+
+        },
+        error: function (response) {
+            $(".widget-body").removeClass("loading");
+            console.log(response.error);
+        }
+    });
+}
+
+function GetCommentsByItemId(Pindex, isVideo) {
+    var Url = GetIrisUrl();
+    $.ajax({
+        type: 'GET',
+        url: '/community/getcommentsbyitemid',
+        dataType: 'json',
+        contentType: 'application/javascript',
+        data: {
+            IdApp: $("#siteId").val(),
+            ItemId: $("#itemId").val(),
+            Psize: 10,
+            Pindex: Pindex
+        },
+        success: function (response) {
+            $.ajax({
+                type: 'POST',
+                url: '/Comments/CommentsByItem',
+                data: {
+                    response: JSON.stringify(response.Data)
+                },
+                success: function (response) {
+                    $("#DisplayComments").html(response.Html);
+                    paintPagination(Pindex, 10, response.Total, 'GetCommentsByItemId', "comentarios");
+                    //Comments on new Video Landing
+                    try {
+                        var NumberComments = $("span.count").text();
+                        if (isVideo == true) {
+                            $("#DisplayComments").hide();
+                            $("#commentsVideoContainer a").first().text(NumberComments + " Comentarios")
+                        }
+
+                        $(".btComentariosOpinion > label").html(NumberComments + " Comentarios")
+                    } catch (e) {
+
+                    }
+
+                },
+                async: false,
+                error: function (response) {
+                    console.log(response.error);
+                }
+            });
+
+        },
+        error: function (response) {
+            $(".widget-body").removeClass("loading");
+            console.log(response.error);
+        }
+    });
+}
+
+
+function GetCommentsByItemId(isVideo) {
+    var Url = GetIrisUrl();
+    $.ajax({
+        type: 'GET',
+        url: '/community/getcommentsbyitemid',
+        dataType: 'json',
+        contentType: 'application/javascript',
+        data: {
+            IdApp: $("#siteId").val(),
+            ItemId: $("#itemId").val(),
+            Psize: 10,
+            Pindex: 0
+        },
+        success: function (response) {
+            $.ajax({
+                type: 'POST',
+                url: '/Comments/CommentsByItem',
+                data: {
+                    response: JSON.stringify(response.Data)
+                },
+                success: function (response) {
+                    $("#DisplayComments").html(response.Html)
+                    try {
+                        var NumberComments = $("span.count").text();
+                        if (isVideo == true) {
+                            $("#DisplayComments").hide();
+                            $("#commentsVideoContainer a").first().text(NumberComments + " Comentarios")
+                        }
+                      $(".btComentariosOpinion > label").html(NumberComments + " Comentarios")
+
+                    } catch (e) {
+
+                    }
+                },
+                async: false,
+                error: function (response) {
+                    console.log(response.error);
+                }
+            });
+
+        },
+        error: function (response) {
+            $(".widget-body").removeClass("loading");
+            console.log(response.error);
+        }
+    });
+}
+
+
+$("#boton_responder").click(function () {
+    alert($(this));
+});
+
+
+function answerComment(CommentId) {
+    $(".commentRespone").hide();
+    $("#" + CommentId).show();
+}
+
+
+
+function LikeComment(idComment) {
+    if ($("#userId").val() == 0 || $("#userId").val() == null) {
+        $("#TileConfirm").html("Aviso")
+        $("#DescriptionConfirm").html("para registrar su voto debe ingresar con una cuenta de usuario")
+        $("#accioneComments").html('<a class="small-12 small button" style="background:#3F832C;" data-reveal-id="ajaxModal" href="/Modals/ModalIngreso.html" data-reveal="" data-reveal-ajax="true">Iniciar sesión</a>')
+        $('#confirmComment').foundation('reveal', 'open');
+        return;
+    }
+
+    var Url = GetIrisUrl();
+    $.ajax({
+        type: 'GET',
+        url: '/community/likecomment',
+        dataType: 'json',
+        contentType: 'application/javascript',
+        data: {
+            IdApp: $("#siteId").val(),
+            CommentId: idComment,
+            UserId: $("#userId").val()
+        },
+        success: function (response) {
+            if (!response.Data) {
+                $("#TileConfirm").html("Aviso")
+                $("#DescriptionConfirm").html(response.Message)
+                $('#confirmComment').foundation('reveal', 'open');
+            }
+            else
+                GetCommentsByItemIdNoCaching();
+
+        },
+        error: function (response) {
+            $(".widget-body").removeClass("loading");
+            console.log(response.error);
+        }
+    });
+}
+
+function DislikeComment(idComment) {
+    if ($("#userId").val() == 0 || $("#userId").val() == null) {
+        $("#TileConfirm").html("Aviso")
+        $("#DescriptionConfirm").html("para registrar su voto debe ingresar con una cuenta de usuario")
+        $("#accioneComments").html('<a class="small-12 small button" style="background:#3F832C;" data-reveal-id="ajaxModal" href="/Modals/ModalIngreso.html" data-reveal="" data-reveal-ajax="true">Iniciar sesión</a>')
+        $('#confirmComment').foundation('reveal', 'open');
+        return;
+    }
+    var Url = GetIrisUrl();
+    $.ajax({
+        type: 'GET',
+        url: '/community/dislikecomment',
+        dataType: 'json',
+        contentType: 'application/javascript',        
+        data: {
+            IdApp: $("#siteId").val(),
+            CommentId: idComment,
+            UserId: $("#userId").val()
+        },
+        success: function (response) {
+            if (!response.Data) {
+                $("#TileConfirm").html("Aviso")
+                $("#DescriptionConfirm").html(response.message)
+                $('#confirmComment').foundation('reveal', 'open');
+            }
+            else
+                GetCommentsByItemIdNoCaching();
+
+        },
+        error: function (response) {
+            $(".widget-body").removeClass("loading");
+            console.log(response.error);
+        }
+    });
+}
+
+function GetCommentsByItemIdAsync(Pindex, IdItem) {
+    var Url = GetIrisUrl();
+    $.ajax({
+        type: 'GET',
+        url: '/community/getcommentsbyitemid',
+        dataType: 'json',
+        contentType: 'application/javascript',
+        data: {
+            IdApp: $("#siteId").val(),
+            ItemId: IdItem,
+            Psize: 10,
+            Pindex: Pindex,
+            rando: Math.random()
+        },
+        success: function (response) {
+            $.ajax({
+                type: 'POST',
+                url: '/Comments/CommentsByItem',
+                data: {
+                    response: JSON.stringify(response.Data)
+                },
+                success: function (response) {
+                    $("#DisplayComments_" + IdItem).html(response.Html);
+                    paintPagination(Pindex, 10, response.Total, 'GetCommentsByItemIdAsync', "comentarios", [IdItem]);
+                    try {
+                        var NumberComments = $("#DisplayComments_" + IdItem).find("span.count").text();
+                        $(".btComentariosOpinion > label[for='ac-" + IdItem + "']").html(NumberComments + " COMENTARIOS")
+                    } catch (e) {
+
+                    }
+
+                },
+                error: function (response) {
+                    console.log(response.error);
+                }
+            });
+
+        },
+        error: function (response) {
+            $(".widget-body").removeClass("loading");
+            console.log(response.error);
+        }
+    });
+}

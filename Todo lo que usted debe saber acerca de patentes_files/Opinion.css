@@ -1,0 +1,1158 @@
+/* Nueva seccion opinion */
+
+@font-face
+{
+    font-family: 'slick';
+    font-weight: normal;
+    font-style: normal;
+    src: url('../fonts/slick.eot');
+    src: url('../fonts/slick.eot?#iefix') format('embedded-opentype'), url('../fonts/slick.woff') format('woff'), url('../fonts/slick.ttf') format('truetype'), url('../fonts/slick.svg#slick') format('svg');
+}
+
+.row.content{
+	margin-top: 1rem;
+}
+
+h1.TittleColumnistas{
+	font-size: 1.375rem;
+	font-weight: 300;
+	margin:1.5rem 0 1rem 0;
+}
+
+.meta .date {
+    line-height: 2.5;
+}
+
+h3.meta a{
+	font-size: .8125rem;
+}
+
+.article-list .meta{
+	padding-top: 0px;
+	margin:0px;
+}
+
+.article-list .article-h {
+    font-size: 1.1875rem;
+    clear: none;
+    margin-top: 0px;
+}
+
+[class*="block-grid-"] > li.opinionFrist{
+  padding-right: 1.25rem;
+}
+
+.article-list-columnistas{
+	padding-bottom: 1.5rem;
+}
+
+.article-list{
+    border-bottom: 1px dotted #868686;
+    padding-bottom: 1.5rem;
+}
+
+/*ul.article-list li{
+	margin-top: 40px;	
+}*/
+
+
+
+.article-list .opinionFrist .small-4.columns{
+	padding-left: 0rem;
+	padding-right: 0rem;
+}
+
+.article-list .opinionFrist .small-8.columns{
+	padding-right: 2rem;
+}
+
+/*Lista columnistas*/
+
+.listOpinion .small-3.columns{
+    padding-right: 0px;    
+}
+
+.listOpinion .small-3{
+   width: 26%;    
+}
+
+.listOpinion .small-9{
+   width: 74%;    
+}
+
+.panelOpinion{
+    border: 1px solid #3d833e;
+    padding: 1.5rem 1rem;
+    position: relative;
+    height: 306px;
+}
+
+.PautaPanelOpinion{
+    border: 0px solid #3d833e;
+    padding: 1.5rem 1rem;
+    height: 306px;
+}
+
+.panelOpinion h3.meta a {
+    font-size: .6875rem;  
+}
+
+.panelOpinion .article-h{
+    font-size: 1.125rem;
+    margin-top: -0.3125rem;
+}
+
+.panelOpinion .meta{
+   padding-top: 0rem;
+   margin: 0px;
+}
+
+.panelOpinion p{
+    color: #656464;
+    font-size: 0.875rem;
+    margin-top: 0.75rem;
+    font-weight: 300;
+    margin-bottom: 1rem;
+}
+
+.leaMas{  
+    position: absolute;
+    bottom: 1rem; 
+    text-align:right; 
+    color: #3f832c;
+    font-size: 0.75rem;
+    font-weight: bold; 
+    width: 89%;
+    text-align: right;
+    font-family: 'Droid Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;
+}
+
+ul.widget-body.opinion .columnistaInv {
+    position: initial;
+    bottom: 12px;
+    left: 14px;
+    background: #d51e1a;
+    color: #FFFFFF;
+    font-size: .625rem;
+    padding: 0.325rem .5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    width: 132px;
+    margin-bottom: 1rem;
+    margin-top: -10px;
+}
+
+.columnistaInv {
+    position: absolute;
+    bottom: 12px;
+    left: 14px;
+    background: #3F832C;
+    color: #FFFFFF;
+    font-size: .625rem;
+    padding: 0.325rem .5rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.panelPublicidad {
+    padding: 6px 1px 2px;
+    border-top: 1px solid #ececec;
+    border-bottom: 1px solid #ececec;
+    background: #f6f6f6;
+    text-align: center;
+}
+
+.plusOpinion{
+    width: 14px;
+    margin-top:-3px;
+    margin-left: 10px;  
+}
+
+
+.listOpinion #RobaPagina{
+    height: 306px;
+    padding-top: 1.65rem;
+}
+
+.panelPublicidad{
+    background-color: #ededed
+}
+
+ul.article-list-columnistas {
+    border-bottom: 1px dotted #868686;
+    padding-bottom: 2rem;
+    margin: 0px -8px;
+}
+
+
+.NoEdicion{
+    color:#3d833e;
+    font-size: 1.25rem;
+    font-family: 'Droid Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;
+    font-weight: bold;
+}
+
+.article-list-columnistas {
+    margin: 0px -8px;
+}
+
+.TittlePortada{
+   font-size: 0.875rem;
+   font-family: 'Droid Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;
+   font-weight: bold; 
+}
+
+.Portada{
+    font-weight: bold;
+    font-size: 1.625rem;
+    line-height: 1.1;
+}
+
+.EdImpresa p{
+ font-family: 'Droid Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;
+ font-size: 1.1875rem;
+ color: #616060;
+ line-height: 1.3;
+}
+
+.btsPortada{
+    position: absolute;
+    bottom: 1rem;
+}
+
+.bt{
+    padding: 14px 2.5em 12px;
+    color: #fff;
+    font-family: 'Droid Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;
+    line-height: 1;
+    font-weight: bold;
+    font-size: 0.9375rem;
+}
+
+a.bt.Suscribase:hover, a.bt.EdImpresa:hover{
+    color: #fff;
+}
+
+.bt.Suscribase{
+    background-color: #3d833e;
+}
+
+.bt.EdImpresa{
+    background-color: #231f20;
+    margin-left: 1rem;
+}
+
+.contentBt{
+    float: left;
+}
+
+.nameColumnista{
+    font-size: 2.25rem;
+    font-weight: bold
+}
+
+.bioColumnista p, .introOpinion p{
+    color: #616060;
+    font-size: 1.1875rem;
+    line-height: 1.5;
+    font-family: 'Droid Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;
+}
+
+.sigaloOpinion{
+    font-size: 0.8125rem;
+    color: #908f8f;
+    float: left;
+    margin-right: 1rem;
+}
+
+.redesColumnistaBio{
+    background-color: #e3e3e3;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    color:#9f9f9f;
+    float: left;
+    margin-right: 1rem;
+    line-height: 2.2;
+    margin-top: -0.5rem;
+}
+
+
+.article-list-columnistas .gradientBottom {
+    width: 100%; 
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.masLeidOpinion{
+       color: #484747;
+    font-size: 19px;
+    margin-left: 1rem;
+    margin-bottom: .5rem;
+    font-weight: bold;
+    width: 12%;
+    float: left;
+}
+
+.contentMaVistoFijo .ContenMasLeidoOpinion {
+    padding: 0.5rem 0.5rem;
+    border-top: 1px solid #d7d7d7;
+    border-left: 1px solid #d7d7d7;
+    border-right: 1px solid #d7d7d7;
+    border-bottom: 8px solid #858585;
+    position: relative;
+    width: 100%;
+    z-index: 1;
+    background: #fff;
+    margin-top: 1.75rem;
+}
+
+.ContenMasLeidoOpinion section.responsive.slider.slick-initialized.slick-slider {
+    margin-bottom: -8px;
+    width: 86%;
+    float: right;
+}
+
+.ContenMasLeidoOpinion{
+  padding: .875rem .5rem .875rem 0;
+    border-top: 1px solid #d7d7d7;
+    border-left: 1px solid #d7d7d7;
+    border-right: 1px solid #d7d7d7;
+    border-bottom: 3px solid #858585;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 100;
+    background: #fff;
+    width: 963px;
+    display: inline-block;
+}
+
+.ContenMasLeidoOpinion .orbit-container .orbit-prev>span {
+    border-right-style: solid;
+    border-color: transparent;
+    border-right-color: #858585;
+    margin-left: 5px;
+}
+
+.ContenMasLeidoOpinion .orbit-container .orbit-prev>span {
+    border-right-color: #858585;
+    margin-left: 0px;
+}
+
+.ContenMasLeidoOpinion .orbit-container .orbit-prev, .ContenMasLeidoOpinion .orbit-container .orbit-next {
+    background-color:transparent;
+}
+
+.ContenMasLeidoOpinion .orbit-container .orbit-prev {
+    left: -6px;
+}
+.ContenMasLeidoOpinion span.number{
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.tittleMasLeido{
+    color: #000;
+}
+
+.tittleMasLeido{
+    font-size: .875rem;
+    margin-top: 0;
+    color: #000;
+    margin-left: -1rem;
+    padding-right: .5rem;
+}
+
+ul.ContenMasLeido li .row .small-6.columns{
+    padding-right: 3px;
+}
+
+ul.ContenMasLeido {
+    margin-left: 0.5rem;
+    margin-right: 0.6875rem;
+}
+
+.ContenMasLeidoOpinion [class*="block-grid-"] > li {
+ padding: 0 0.625rem 0rem;
+}
+
+.tittleMasLeido a p{
+    color: #000;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.tittleMasLeido a p:hover{
+    color: #3d833e
+}
+
+.ContenMasLeidoOpinion .orbit-container .orbit-next {
+    right: -10px;
+}
+.ContenMasLeidoOpinion .orbit-container .orbit-next:hover > span {
+    border-left-color: #000;
+}
+
+.ContenMasLeidoOpinion .orbit-container .orbit-next>span {
+    border-left-color: #858585;
+    margin-left: -4px;
+}
+
+.ContenMasLeidoOpinion .orbit-container .orbit-prev > span, .ContenMasLeidoOpinion .orbit-container .orbit-next > span {
+    top: 50%; 
+}
+
+.ContenMasLeidoOpinion .orbit-container .orbit-prev, .ContenMasLeidoOpinion .orbit-container .orbit-next{
+    top:40%;    
+}
+
+.ContenMasLeidoOpinion .orbit-container .orbit-timer{
+    display: none
+}
+
+.ContenMasLeidoOpinion .orbit-container .orbit-prev:hover > span {
+    border-right-color: #000;
+}
+
+#LePuedeInteresar{
+    border: 1px solid #d7d7d7;
+    padding:1rem;
+    margin-top: 2rem
+}
+
+.ultimasNoticias {
+    margin-top: 2rem;
+}
+
+.ultimasNoticias h2{
+    color: #3d833e;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.ContentUltimasNoticias h3{
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+
+.panelUltimasNoticias{
+    position: relative;
+    height: 325px;
+    border-bottom:1px solid #d7d7d7;
+}
+
+.panelUltimasNoticias .leaMas {
+    position: absolute;
+    bottom: 1rem;
+    text-align: right;
+    color: #3f832c;
+    font-size: 0.75rem;
+    font-weight: bold;
+    width: 100%;
+    text-align: right;
+    font-family: 'Droid Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;
+}
+
+/*h3 a{
+    color: #000
+}*/
+
+ul.small-block-grid-1.medium-block-grid-2.large-block-grid-3.ContentUltimasNoticias, ul.small-block-grid-1.medium-block-grid-2.large-block-grid-{
+    margin: 0rem -8px;
+}
+
+.introOpinion .meta {
+    margin-top: -6px;
+}
+.tittleArticuloOpinion{
+    font-weight: bold;
+}
+
+.articuloOpinion h4{
+    color: #908f8f;
+    font-size: 0.8125rem;
+    border-bottom: 1px solid #c1c1c1;
+    text-align: center;
+    padding-bottom: 0.875rem;
+}
+
+.articuloOpinion .large-1 {
+    width: 11.33333%;
+}
+
+.articuloOpinion .large-11 {
+    width: 88.66667%;
+}
+
+.redesVideos .icon-facebook2 {
+    color: #3b5998;
+}
+.share-item [class^="icon-"], .share-item [class*=" icon-"] {
+    font-size: 2.5rem;
+    background: transparent;
+    border-radius: inherit;
+    padding: inherit;
+}
+.redesVideos .icon-twitter2 {
+    color: #00abf1;
+}
+
+.redesVideos .icon-googleplus {
+    color: #dc4e41;
+}
+
+.redesOpinion{
+    text-align: center;
+}
+
+.ui.right.floated{
+    float: right;
+    margin-right: 0em;
+    margin-bottom:1.5em;
+    margin-left: 2.5em;
+    width: 300px;
+    height: auto;
+    font-size: 1rem;
+}
+
+.ui.left.floated.destacado{
+    float: left;
+    margin-right: 1em;
+    margin-bottom: 1em;
+    margin-left: 0em;
+    width: 270px;
+    height: auto;
+    background-color: #3d833e;
+    color: #fff;
+    padding: 1.25rem;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    opacity: 0;
+}
+
+.ContentArticuloOpinion p {
+    font-size: 1.25rem;
+}
+
+@-webkit-keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(20px);
+    transform: translateY(20px);
+}
+
+100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+}
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(20px);
+    -ms-transform: translateY(20px);
+    transform: translateY(20px);
+}
+
+100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+}
+}
+
+.fadeInUp {
+  -webkit-animation-name: fadeInUp;
+  animation-name: fadeInUp;
+}
+
+.animated {
+    -webkit-animation-duration: 1.5s;
+    animation-duration: 1.5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+/* Acordeon comentarios Opinion*/
+
+.ac-container {
+    width: 100%;
+    text-align: center;
+}
+
+.ac-container label{
+    padding: 10px 30px;
+    cursor: pointer;
+    color: #000;
+    font-size: 0.9375rem;
+    border:3px solid #000;
+    font-family: 'Droid Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;
+    font-weight: bold;
+}
+
+.ac-container label:hover{
+    background: #fff;
+}
+
+.ac-container input:checked + label,
+.ac-container input:checked + label:hover{
+    background: #000;
+    color: #fff;
+}
+.ac-container label:hover:after,
+.ac-container input:checked + label:hover:after{
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    right: 13px;
+    top: 7px;    
+}
+
+.ac-container input{
+    display: none;
+}
+
+.ac-container article{
+    background: rgba(255, 255, 255, 0.5);
+    margin-top: -1px;
+    overflow: hidden;
+    height: 0px;
+    position: relative;
+    z-index: 10;
+    -webkit-transition: height 0.3s ease-in-out, box-shadow 0.6s linear;
+    -moz-transition: height 0.3s ease-in-out, box-shadow 0.6s linear;
+    -o-transition: height 0.3s ease-in-out, box-shadow 0.6s linear;
+    -ms-transition: height 0.3s ease-in-out, box-shadow 0.6s linear;
+    transition: height 0.3s ease-in-out, box-shadow 0.6s linear;
+}
+
+.ac-container article p{
+    font-style: normal;
+    color: #777;
+    line-height: 23px;
+    font-size: 14px;
+}
+.ac-container.btComentariosOpinion article.ac-small {
+    width: 80%;
+    margin: auto;
+}
+
+.ac-container input:checked ~ article{
+    -webkit-transition: height 0.5s ease-in-out, box-shadow 0.1s linear;
+    -moz-transition: height 0.5s ease-in-out, box-shadow 0.1s linear;
+    -o-transition: height 0.5s ease-in-out, box-shadow 0.1s linear;
+    -ms-transition: height 0.5s ease-in-out, box-shadow 0.1s linear;
+    transition: height 0.5s ease-in-out, box-shadow 0.1s linear;
+}
+
+.ac-container input:checked ~ article.ac-small{
+   height: auto;
+    z-index: 0;
+}
+
+.ac-container input:checked ~ article.ac-medium{
+    height: 180px;
+}
+
+.ac-container input:checked ~ article.ac-large{
+    height: 230px;
+}
+
+div#CommentsSection {
+    text-align: left;
+}
+
+.tittleTagsOpinion{
+    font-size: 0.875rem;
+    font-family: 'Droid Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;
+    font-weight:bold;
+    float: left;
+}
+
+.flechaOpinion{
+    margin-top: 0.2rem;
+    margin-left: 1rem;
+    margin-right: 0.25rem;
+    color: #000;
+    float: left;
+}
+
+.tagsOpinion .article-tags {    
+    width: auto;
+    float: left;
+    padding: 0px;
+    font-size: 0.75rem;
+}
+
+.tagsOpinion {
+        font-weight: bold;
+    margin-top: 4rem;
+    overflow: auto;
+    border-bottom: 1px dotted #d7d7d7;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.tagsOpinion .article-tags h3 {
+    font-family: 'Droid Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;
+    font-size: .75rem;
+    line-height: inherit;
+    margin: 0;
+}
+
+.ContenMasLeidoOpinionRelative {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+}
+
+/*SLICK OPINION*/
+
+.slick-prev,
+.slick-next
+{
+    font-size: 0;
+    line-height: 0;
+
+    position: absolute;
+    top: 50%;
+
+    display: block;
+
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    -webkit-transform: translate(0, -50%);
+    -ms-transform: translate(0, -50%);
+    transform: translate(0, -50%);
+
+    cursor: pointer;
+
+    color: transparent;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+.slick-prev:hover,
+.slick-prev:focus,
+.slick-next:hover,
+.slick-next:focus
+{
+    color: transparent;
+    outline: none;
+    background: transparent;
+}
+.slick-prev:hover:before,
+.slick-prev:focus:before,
+.slick-next:hover:before,
+.slick-next:focus:before
+{
+    opacity: 1;
+}
+.slick-prev.slick-disabled:before,
+.slick-next.slick-disabled:before
+{
+    opacity: .25;
+}
+
+.slick-prev:before,
+.slick-next:before
+{
+    font-family: 'slick';
+    font-size: 20px;
+    line-height: 1;
+
+    opacity: .75;
+    color: white;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.slick-prev
+{
+    left: 0px;
+}
+[dir='rtl'] .slick-prev
+{
+    right:0px;
+    left: auto;
+}
+.slick-prev:before
+{
+    content: '←';
+}
+[dir='rtl'] .slick-prev:before
+{
+    content: '→';
+}
+
+.slick-next
+{
+    right: -25px;
+}
+[dir='rtl'] .slick-next
+{
+    right: auto;
+    left: -25px;
+}
+.slick-next:before
+{
+    content: '→';
+}
+[dir='rtl'] .slick-next:before
+{
+    content: '←';
+}
+
+/* Dots */
+.slick-dotted.slick-slider
+{
+    margin-bottom: -8px;
+}
+
+.slick-dots
+{
+    position: absolute;
+    bottom: -25px;
+
+    display: block;
+
+    width: 100%;
+    padding: 0;
+    margin: 0;
+
+    list-style: none;
+
+    text-align: center;
+}
+.slick-dots li
+{
+    position: relative;
+
+    display: inline-block;
+
+    width: 20px;
+    height: 20px;
+    margin: 0 5px;
+    padding: 0;
+
+    cursor: pointer;
+}
+.slick-dots li button
+{
+    font-size: 0;
+    line-height: 0;
+
+    display: block;
+
+    width: 20px;
+    height: 20px;
+    padding: 5px;
+
+    cursor: pointer;
+
+    color: transparent;
+    border: 0;
+    outline: none;
+    background: transparent;
+}
+.slick-dots li button:hover,
+.slick-dots li button:focus
+{
+    outline: none;
+}
+.slick-dots li button:hover:before,
+.slick-dots li button:focus:before
+{
+    opacity: 1;
+}
+.slick-dots li button:before
+{
+    font-family: 'slick';
+    font-size: 6px;
+    line-height: 20px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 20px;
+    height: 20px;
+
+    content: '•';
+    text-align: center;
+
+    opacity: .25;
+    color: black;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.slick-dots li.slick-active button:before
+{
+    opacity: .75;
+    color: black;
+}
+
+.slick-next {
+    right: 0px;
+}
+
+.slick-slider
+{
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -khtml-user-select: none;
+    -ms-touch-action: pan-y;
+    touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+    padding: 0px 1.5rem;
+}
+
+.slick-list
+{
+    position: relative;
+
+    display: block;
+    overflow: hidden;
+
+    margin: 0;
+    padding: 0;
+}
+.slick-list:focus
+{
+    outline: none;
+}
+.slick-list.dragging
+{
+    cursor: pointer;
+    cursor: hand;
+}
+
+.slick-slider .slick-track,
+.slick-slider .slick-list
+{
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.slick-track
+{
+    position: relative;
+    top: 0;
+    left: 0;
+
+    display: block;
+}
+.slick-track:before,
+.slick-track:after
+{
+    display: table;
+
+    content: '';
+}
+.slick-track:after
+{
+    clear: both;
+}
+.slick-loading .slick-track
+{
+    visibility: hidden;
+}
+
+.slick-slide
+{
+    display: none;
+    float: left;
+
+    height: 100%;
+    min-height: 1px;
+}
+[dir='rtl'] .slick-slide
+{
+    float: right;
+}
+.slick-slide img
+{
+    display: block;
+}
+.slick-slide.slick-loading img
+{
+    display: none;
+}
+.slick-slide.dragging img
+{
+    pointer-events: none;
+}
+.slick-initialized .slick-slide
+{
+    display: block;
+}
+.slick-loading .slick-slide
+{
+    visibility: hidden;
+}
+.slick-vertical .slick-slide
+{
+    display: block;
+
+    height: auto;
+
+    border: 1px solid transparent;
+}
+.slick-arrow.slick-hidden {
+    display: none;
+}
+
+.slick-prev:before, .slick-next:before {
+    color: black;
+}
+
+.slick-dots {
+    display: none !important;
+}
+
+@media (min-width:641px) and (max-width:1000px){
+    .ContenMasLeidoOpinion {
+        width: 96% !important; 
+    }
+}
+
+@media (min-width:107px) and (max-width:641px){
+    .panelOpinion {
+        height: auto;
+    }
+
+    h2.nameColumnista {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .redesBio{
+        width: 154px;
+        margin: 2rem auto;
+    }
+
+    .panelUltimasNoticias{
+        height: auto;
+        padding-bottom: 1rem;
+    }
+
+    .panelUltimasNoticias a{
+        display: block;
+    }
+
+    .nameColumnista{
+        font-size: 1.875rem;      
+        line-height: 1.2;
+    }
+
+    .bioColumnista p {
+        font-size: 1rem;
+        line-height: 1.4;
+        text-align: center;
+    }
+
+    .ContenMasLeidoOpinion{
+        position: relative;
+        width: 100%;
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+
+    }
+
+    .panelOpinion p {
+
+        margin-bottom: 2rem;
+    }
+
+    .contentBt{
+        float: none;
+        display: flex;
+    }
+
+    .btsPortada{
+        position: relative;
+        bottom: 0rem;
+    }
+    .panelUltimasNoticias {
+       position: inherit; 
+   }
+
+   .panelUltimasNoticias .leaMas {
+    position: inherit; 
+    }
+
+    .ContentUltimasNoticias h3 {
+        margin-bottom: 1rem;
+    }
+
+    .bt.EdImpresa {
+        margin-left:0rem;
+        margin-top: 0.5rem;
+    }
+
+    select#selectorFilterAutor.right{
+        float: right !important;
+    }
+
+    .row.EdImpresa {
+        margin-top: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    li.introOpinion {
+        text-align: center;
+    }
+    .bioColumnista p, .introOpinion p {
+        color: #616060;
+        font-size: 1rem;
+        line-height: 1.4;
+        font-family: 'Droid Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;
+    }
+    .articuloOpinion .small-12 {
+        width: 100%;
+    }
+    .articuloOpinion h4 {
+         display: none
+    }
+
+    .redesOpinion.redes {
+        position: fixed !important;
+        bottom: 0;
+        background-color: #fff;
+        z-index: 118;
+        width: 100%;
+        border-top: 3px solid #ccc;
+        padding: 7px 0 0 0;
+        left: 0;
+        right: 0;
+    }
+    .redesOpinion.redes .inline-list > li {
+        float: left; 
+    }
+    .wp2.ui.left.floated.destacado.animated.fadeInUp{
+        float: none !important;
+        margin: 0rem auto 2rem auto;
+    }
+}

@@ -1,0 +1,867 @@
+﻿function GetUserFromLogin() {
+    ValidateUserLogin();
+    if (!validateLogin) {
+        $("#ChangeUserNameLogin").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box warning">Los datos marcados con esterisco (*) son obligatorios<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+        enableButton("btnForgotPassword");
+    }
+    else {
+        var userName = $("#userLogin").val();
+        var password = $("#passwordLogin").val();
+        var idProvider = 4;
+        var email = "";
+        GetUserWeb(userName, password, idProvider, email);
+    }
+}
+
+function closeMessage(divMessage) {
+    if ($('#' + divMessage) != null) {
+        $('#' + divMessage).remove();
+    }
+}
+
+function ValidateUserLogin() {
+    //Inicializar validación
+    $("#ChangeUserNameLogin").html("");
+    disableButton("btnForgotPassword");
+    validateLogin = true;
+    validateInputLogin("userLogin");
+    validateInputLogin("passwordLogin");
+}
+
+function validateInputLogin(input) {
+    if ($("#" + input).val() == null || $("#" + input).val() == '' || $("#" + input).val() == '0') {
+        $("#" + input).css({ "border-color": "#C40C1D", "border-width": "3px" });
+        validateLogin = false;
+    }
+    else {
+        $("#" + input).css({ "border-color": "#111", "border-width": "1px" });
+    }
+}
+
+function GetUserWeb(userName, password, idProvider, email) {
+
+    var Url = GetIrisUrl();
+    $(".widget.ingreso").addClass("loading");
+    $.ajax({
+        type: 'GET',
+        url: '/community/getuser',
+        dataType: 'json',
+        contentType: 'application/javascript',
+        data: {
+            UserName: userName,
+            IdProvider: idProvider,
+            Email: email,
+            Password: password
+        },
+        success: function (response) {
+            $(".widget.ingreso").removeClass("loading");
+            switch (response.Status) {
+                case 0:
+                    $("#ChangeUserNameLogin").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box warning">Usuario o contraseña no válidos<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+                    enableButton("btnLoginUser");
+                    break;
+                case 1:
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Account/Login',
+                        data: {
+                            UserName: response.Data[0].userName,
+                            IsValid: true,
+                            Password: response.Data[0].password,
+                            Id: response.Data[0].id
+                        },
+                        success: function (response) {
+                            $("#MessageLoginUser").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box info">Bienvenido a Dinero.com, ahora puede participar en nuestro portal<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+                            if (response.Url != null)
+                                window.location.href = response.Url;
+
+                        },
+                        async: false,
+                        error: function (response) {
+                            $("#MessageLoginUser").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box info">Error en el proceso de autenticación, por favor inténtelo más tarde<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+                            console.log(response.message);
+                        }
+                    });
+                    break;
+                case 2:
+                    $("#MessageLoginUser").html('<div id="valInfoLogin" data-alert class="alert-box info">Usuario o contraseña no válidos<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div>');
+                    enableButton("btnLoginUser");
+                    break;                
+                case 3:
+                    alert(response.message);
+                default:
+                    $("#MessageLoginUser").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box warning">Usuario o contraseña no válidos<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+                    enableButton("btnLoginUser");
+                    break;
+            }
+
+        },
+        error: function (response) {
+            $("#MessageLoginUser").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box info">Error en el proceso de autenticación, por favor inténtelo más tarde<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+            console.log(response.message);
+        }
+    });
+
+}
+
+function AddUserFormRegister() {
+    ValidateFormRegister();
+    if (!validateLogin) {
+        $("#MessageRegisterUser").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box warning">Los datos marcados con esterisco (*) son obligatorios<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+        enableButton("regsubmit");
+    }
+    else {
+        if (agreeTerms()) {
+            var Avatar = null;
+            var BirthDate = null;
+            var Email = $("#usernameRegister").val();
+            var FirstName = $("#nameRegister").val();
+            var Gender = null;
+            var IdProvider = 4; //1	Facebook  | 2	Twitter  | 3	Google   | 4	Site
+            var LastName = $("#lastName").val();
+            var Password = $("#passwordRegister").val();
+            var UserName = $("#usernameRegister").val();
+            AddUserWeb(Avatar, BirthDate, Email, FirstName, Gender, IdProvider, LastName, Password, UserName);
+        }
+    }
+}
+function chkIsValid(input, btn) {
+    if (!$("#" + input).is(':checked')) {
+        disableButton(btn);
+        $("#MessageRegisterUser").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box warning">Debe aceptar las condiciones<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+        $("#" + input).css({ "border-color": "#C40C1D", "border-width": "2px" });
+        validateLogin = false;
+
+    }
+    else {
+        enableButton(btn);
+        validateLogin = true;
+    }
+}
+
+function agreeTerms() {
+    chkIsValid("habeas", "regsubmit");
+    return validateLogin;
+}
+function isTextOnly(input) {
+    return /^[a-zA-Z_áéíóúñ\s]*$/.test($("#" + input).val());
+}
+function ValidateFormRegister() {
+    //Inicializar validación
+    $("#MessageRegisterUser").html("");
+    $("#MessageRegisterUser2").html("");
+    disableButton("regsubmit");
+    validateLogin = true;
+    validateInputLogin("nameRegister");
+    validateInputLogin("lastName");
+    validateInputLogin("passwordRegister");
+    if (!validateLogin) {
+        $("#MessageRegisterUser").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box warning">Los campos con (*) son obligatorios<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+        enableButton("regsubmit");
+    }
+    else {
+        if (!isTextOnly("nameRegister") && !isTextOnly("lastName")) {
+            $("#MessageRegisterUser").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box warning">Los campos Nombre* y Apellido acepta únicamente letras<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+            validateLogin = false;
+            enableButton("regsubmit");
+        }
+    }
+    EmailPasswordRegister("usernameRegister");
+}
+
+function EmailPasswordRegister(input) {
+    var email = $("#" + input).val();
+
+    //Validar mail
+    if (!isValidEmail(email)) {
+        $("#MessageRegisterUser").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box warning">Verifique la dirección de correo electrónico<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+        $("#MessageRegisterUser2").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box warning">Verifique la dirección de correo electrónico<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+        $("#" + input).css({ "border-color": "#C40C1D", "border-width": "2px" });
+        validateLogin = false;
+        enableButton("regsubmit");
+        return false;
+    }
+    else {
+        $("#" + input).css({ "border-color": "#111", "border-width": "1px" });
+        return true;
+
+    }
+
+}
+function AddUserWeb(Avatar, BirthDate, Email, FirstName, Gender, IdProvider, LastName, Password, UserName) {
+    var Url = GetIrisUrl();
+    $(".widget-body").addClass("loading");
+    $.ajax({
+        type: 'GET',
+        url: '/community/adduser',
+        dataType: 'json',
+        contentType: 'application/javascript',
+        data: {
+            Active: true,
+            Avatar: Avatar,
+            BirthDate: BirthDate,
+            Blogger: false,
+            Email: Email,
+            FirstName: FirstName,
+            Gender: Gender,
+            IdProvider: IdProvider,
+            LastName: LastName,
+            Password: Password,
+            Privacy: true,
+            TermsUse: true,
+            UserName: UserName,
+        },
+        success: function (response) {
+            $(".widget-body").removeClass("loading");
+            console.log('Respuesta servidor:' + response);
+            switch (response.Status) {
+                case 0:
+                    $("#MessageRegisterUser").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box info">Nombre de usuario no disponible<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+                    $("#user").css({ "border-color": "#C40C1D", "border-width": "3px" });
+                    validateLogin = false;
+                    enableButton("regsubmit");
+                    break;
+                case 1:
+                    $("#ThisId").val(response.Data["0"].id);
+                    $("#token").val(response.Data["0"].token);
+                    //LogIn(response);
+                    if (response.Data["0"].idProvider === 4) {
+                        SendMail(1, $("#MailerUrl").val(), response.Data["0"].email, 'webmaster@semana.com', '', '', 'Confirmación de suscripción al portal Dinero.com', location.origin + '/community/ActivateUserState?' + response.Data[0].token, FirstName, '', '', '', '', '4')
+                    }
+                    confirmIscription();
+                    break;
+                case 2:
+                    $("#MessageRegisterUser").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box info">Usuario ya registrado<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+                    $("#user").css({ "border-color": "#C40C1D", "border-width": "3px" });
+                    validateLogin = false;
+                    enableButton("regsubmit");
+                    break;
+                case -1:
+                    $("#MessageRegisterUser").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box info">Usuario no activo<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+                    $("#user").css({ "border-color": "#C40C1D", "border-width": "3px" });
+                    validateLogin = false;
+                    enableButton("regsubmit");
+                default:
+                    $("#MessageRegisterUser").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box info">Usuario ya registrado<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+                    $("#user").css({ "border-color": "#C40C1D", "border-width": "3px" });
+                    validateLogin = false;
+                    enableButton("regsubmit");
+                    break;
+            }
+        },
+        error: function (response) {
+            console.log(response.error);
+        }
+    });
+}
+
+
+function AddUserSocial(Avatar, BirthDate, Email, FirstName, Gender, IdProvider, LastName, Password, UserName) {
+
+    var Url = GetIrisUrl();
+    $(".widget-body").addClass("loading");
+    $.ajax({
+        type: 'GET',
+        url: '/community/adduser',
+        dataType: 'json',
+        contentType: 'application/javascript',
+        data: {
+            Active: true,
+            Avatar: Avatar,
+            BirthDate: BirthDate,
+            Blogger: false,
+            Email: Email,
+            FirstName: FirstName,
+            Gender: Gender,
+            IdProvider: IdProvider,
+            LastName: LastName,
+            Password: Password,
+            Privacy: true,
+            TermsUse: true,
+            UserName: UserName
+        },
+        success: function (response) {
+            $(".widget-body").removeClass("loading");
+            switch (response.Status) {
+                case 0:
+                    LogIn(response)
+                    break;
+                case 1:
+                    LogIn(response)
+                    break;
+                case -1:
+                    alert(response.message);
+            }
+
+        },
+        error: function (response) {
+            console.log(response.error);
+        }
+    });
+}
+
+
+function changeUserName() {
+    $("#ChangeUserName").hide();
+    $("#ChangeUserNameLogin").hide();
+}
+
+function SingOut() {
+    $.ajax({
+        type: 'POST',
+        url: '/Account/SingOut',
+        data: {
+        },
+        success: function (response) {
+            if (response.Url != null)
+                window.location.href = response.Url;
+
+        },
+        async: false,
+        error: function (response) {
+            console.log(response.error);
+        }
+    });
+}
+
+function LogIn(response) {
+    $.ajax({
+        type: 'POST',
+        url: '/Account/Login',
+        data: {
+            UserName: response.Data[0].userName,
+            IsValid: true,
+            Password: response.Data[0].password,
+            Id: response.Data[0].id,
+            userValidate: response.Data[0].userValidate
+        },
+        success: function (response) {
+            if (response.Url != null) {
+                window.location.href = response.Url;
+            }
+        },
+        async: false,
+        error: function (response) {
+            console.log(response.error);
+        }
+    });
+}
+
+function getProfile(UserId) {
+    var Url = GetIrisUrl();
+    $.ajax({
+        type: 'GET',
+        url: '/community/getuserbyid',
+        dataType: 'json',
+        contentType: 'application/javascript',
+        data: {
+            Id: UserId
+        },
+        success: function (response) {
+            $(".widget-body").removeClass("loading");
+            switch (response.Status) {
+                case 0:
+                    alert(response.Message)
+                    break;
+                case 1:
+                    ChargeInfoUser(response);
+                    break;
+                case -1:
+                    alert(response.Message);
+            }
+
+        },
+        error: function (response) {
+            $(".widget-body").removeClass("loading");
+            console.log(response.error);
+        }
+    });
+}
+
+function ChargeInfoUser(response) {
+    var Id = response.Data[0].id;
+    var Email = response.Data[0].email;
+    var Password = response.Data[0].password != 'undefined' || response.Data[0].password != 'null' ? response.Data[0].password : '';
+    var IdProvider = response.Data[0].idProvider != 'undefined' || response.Data[0].idProvider != 'null' ? response.Data[0].idProvider : '4';
+    var FirstName = response.Data[0].firstName != 'undefined' || response.Data[0].firstName != 'null' ? response.Data[0].firstName : '';
+    var LastName = response.Data[0].lastName != 'undefined' || response.Data[0].lastName != 'null' ? response.Data[0].lastName : '';
+    var Gender = response.Data[0].gender != 'undefined' || response.Data[0].gender != 'null' ? response.Data[0].gender : '';
+    var IdentificationType = response.Data[0].identificationType != 'undefined' || response.Data[0].identificationType != 'null' ? response.Data[0].identificationType : '';
+    var Identification = response.Data[0].identification != 'undefined' || response.Data[0].identification != 'null' ? response.Data[0].identification : '';
+    var CityId = response.Data[0].cityId != 'undefined' || response.Data[0].cityId != 'null' ? response.Data[0].cityId : '';
+    var Avatar = response.Data[0].avatar != 'undefined' || response.Data[0].avatar != 'null' ? response.Data[0].avatar : '';
+    var TermsUse = response.Data[0].termsUse != 'undefined' || response.Data[0].termsUse != 'null' ? response.Data[0].termsUse : '';
+    var Privacy = response.Data[0].privacy != 'undefined' || response.Data[0].privacy != 'null' ? response.Data[0].privacy : '';
+    var BirthDate = response.Data[0].birthDate != 'undefined' || response.Data[0].birthDate != 'null' ? response.Data[0].birthDate : '';
+    var HomeAddress = response.Data[0].homeAddress != 'undefined' || response.Data[0].homeAddress != 'null' ? response.Data[0].homeAddress : '';
+    var OfficeAddress = response.Data[0].officeAddress != 'undefined' || response.Data[0].officeAddress != 'null' ? response.Data[0].officeAddress : '';
+    var MovilePhone = response.Data[0].movilePhone != 'undefined' || response.Data[0].movilePhone != 'null' ? response.Data[0].movilePhone : '';
+    var OfficePhone = response.Data[0].officePhone != 'undefined' || response.Data[0].officePhone != 'null' ? response.Data[0].officePhone : '';
+    var HomePhone = response.Data[0].homePhone != 'undefined' || response.Data[0].homePhone != 'null' ? response.Data[0].homePhone : '';
+    var OccupationId = response.Data[0].occupationId != 'undefined' || response.Data[0].occupationId != 'null' ? response.Data[0].occupationId : '';
+    $.ajax({
+        type: "POST",
+        url: urlChargeDataUser,
+        data: {
+            Id: Id,
+            Password: Password,
+            IdProvider: IdProvider,
+            Email: Email,
+            FirstName: FirstName,
+            LastName: LastName,
+            Gender: Gender,
+            IdentificationType: IdentificationType,
+            Identification: Identification,
+            CityId: CityId,
+            Avatar: Avatar,
+            TermsUse: TermsUse,
+            Privacy: Privacy,
+            BirthDate: BirthDate,
+            HomeAddress: HomeAddress,
+            OfficeAddress: OfficeAddress,
+            MovilePhone: MovilePhone,
+            OfficePhone: OfficePhone,
+            HomePhone: HomePhone,
+            OccupationId: OccupationId
+        },
+        success: function (result) {
+            $("#divInfoUserRegistry").html("");
+            $("#divInfoUserRegistry").html(result.Html);
+        },
+        error: function (result) {
+            console.log(result.error);
+        }
+    });
+}
+
+function SubscribeNewsletterNew(elements) {
+    $.ajax({
+        type: 'GET',
+        url: "/newsLetter/suscribenews",
+        dataType: 'json',
+        contentType: 'application/javascript',
+        data: {
+            subs: JSON.stringify(elements),
+        },
+        success: function (res) {
+            $("#MessageLogNews").html('');
+            $("#MessageRegisterUser").html('');
+            if (res.success) {
+                if (res.sendMail) {
+                    $("#mensajeModal > #texto").html("Gracias por suscribirse a nuestro Newsletter. Hemos enviado un correo de confirmación.")
+                } else {
+                    $("#mensajeModal > #texto").html("Gracias por suscribirse a nuestro newsletter. Reciba pronto el mejor contenido periodístico")
+                }
+            } else {
+                $("#mensajeModal > #texto").html("Error al suscribirse al newsletter. Intentelo nuevamente")
+            }
+            $('#mensajeModal').foundation('reveal', 'open');
+        },
+        error: function (result) {
+            $("#mensajeModal > #texto").html("Error al suscribirse al newsletter. Intentelo nuevamente")
+            $('#mensajeModal').foundation('reveal', 'open');
+        }
+    });
+}
+function SubscribeLstNews(email, elements, container, conditions) {
+
+    var arrNews = [];
+    elements.each(function () {
+        arrNews.push({ Email: email, MagazineId: parseInt($(this).val()), Active: $(this).is(':checked') })
+    });
+
+    //Validar mail
+    if (!isValidEmail(email)) {
+        $("#" + container).html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box warning">Verifique la dirección de correo electrónico<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+        return
+    }
+    else if (!$("#" + conditions).is(":checked")) {
+        $("#" + container).html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box warning">Debe aceptar las condiciones<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+        return
+    }
+
+    SubscribeNewsletterNew(arrNews);
+}
+function SubscribeNewsletterDinero(email, container, conditions) {
+    var arrNews = [];
+    arrNews.push({ Email: email, MagazineId: 2, Active: true })
+
+    //Validar mail
+    if (!isValidEmail(email)) {
+        $("#" + container).html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box warning">Verifique la dirección de correo electrónico<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+        return
+    }
+    else if (!$("#" + conditions).is(":checked")) {
+        $("#" + container).html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box warning">Debe aceptar las condiciones<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+        return
+    }
+
+    SubscribeNewsletterNew(arrNews);
+}
+
+function isValidEmail(email) {
+    return /^\w+([\.\+\-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(email);
+}
+
+function UpdateNews(email) {
+    disableButton('btnRegister');
+    $("#confirmdiv").append("<div data-alert class='alert-box hide'><span id='lblResult'></span><a href='#' class='close'>&times;</a></div>");
+    SubscribeNewsletter(email);
+}
+
+/*Funciones página de registro*/
+function gender(dataGender) {
+    genderUser = dataGender.value;
+}
+
+
+/*Validaciones Registro*/
+function InfoUser(bImage) {
+
+    var urlData;
+    var Avatar;
+    if (!bImage) {
+        if ($("#cbTerminos").is(':checked') && $("#cbPoliticas").is(':checked')) {
+            //Validar imagen actual
+            srcImage = $('#imgExistingUser').attr('src');
+            if ($.trim(srcImage) != '') {
+                urlData = srcImage.split("/");
+                Avatar = urlData[urlData.length - 1];
+                if (Avatar == 'Dineroplacehold.png')
+                    Avatar = null
+            }
+            setDataUser(Avatar, false);
+        }
+        else {
+            $("#divMessageInfo").html("");
+            $("#divMessageInfo").html('<div class="column"><div id="mesaggeDataUser" data-alert class="alert-box warning">Debe aceptar: <br> 1. Políticas y términos de uso.' +
+                              '<br> 2. Políticas de uso y privacidad de las comunidades de Semana. <a href="javascript:closeMessage(\'mesaggeDataUser\');" class="close">&times;</a></div></div>');
+            $(document).foundation();
+        }
+    }
+    else {
+        //Enviar petición actualización imagen
+        srcImage = $('#imgUserUpdate').attr('src');
+        if ($.trim(srcImage) != '') {
+            $("#divMessageImage").empty();
+            urlData = srcImage.split("/");
+            Avatar = urlData[urlData.length - 1];
+            setDataUser(Avatar, true);
+        }
+        else {
+            $("#divMessageImage").empty();
+            $("#divMessageImage").html('<div class="column"><div id="mesaggeImageUser" data-alert class="alert-box warning">Seleccionar imagen<a href="javascript:closeMessage(\'mesaggeImageUser\');" class="close">&times;</a></div></div>');
+            $(document).foundation();
+        }
+    }
+}
+
+function setDataUser(avatarUser, updateImage) {
+    var Id = tipoUser;
+    var FirstName = $("#txtFirstName").val();
+    var LastName = $("#txtLastName").val();
+    var Gender = genderUser;
+    //Tipo Identificación
+    var selectIdentificationType = document.getElementById("ddlIdentificationType");
+    var IdentificationType = selectIdentificationType.options[selectIdentificationType.selectedIndex].value;
+    var Identification = $("#txtIdentification").val();
+    //Ciudad
+    var CityId
+    if (document.getElementById("ddlCity") != null) {
+        var selectCity = document.getElementById("ddlCity");
+        CityId = selectCity.options[selectCity.selectedIndex].value;
+    }
+    var Avatar = avatarUser;
+    var TermsUse = null;
+    var Privacy = null;
+    var BirthDate = $("#txtBirthDate").val();
+    var HomeAddress = $("#txtHomeAddress").val();
+    var OfficeAddress = $("#txtOfficeAddress").val();
+    var MovilePhone = $("#txtMovilePhone").val();
+    var OfficePhone = $("#txtOfficePhone").val();
+    var HomePhone = $("#txtHomePhone").val();
+    //Ocupación
+    var selectOccupation = document.getElementById("ddlOccupation");
+    var OccupationId = selectOccupation.options[selectOccupation.selectedIndex].value;
+    var TermsUse = true;
+    var Privacy = true;
+    //Enviar petición actualización usuario
+    UpdateUserWeb(Id, FirstName, LastName, Gender, IdentificationType, Identification, CityId, Avatar, TermsUse, Privacy, BirthDate,
+                  HomeAddress, OfficeAddress, MovilePhone, OfficePhone, HomePhone, OccupationId, TermsUse, Privacy, updateImage)
+}
+
+function UpdateUserWeb(Id, FirstName, LastName, Gender, IdentificationType, Identification, CityId, Avatar, TermsUse, Privacy, BirthDate, HomeAddress, OfficeAddress, MovilePhone, OfficePhone, HomePhone, OccupationId, TermsUse, Privacy, updateImage) {
+    //Estado botón
+    if (!updateImage) {
+        disableButton("btnUpdateUser");
+    }
+    else {
+        disableButton("btnImagenUser");
+    }
+    var Url = GetIrisUrl();
+    $.ajax({
+        type: 'GET',
+        url: '/community/UpdateUser',
+        dataType: 'json',
+        contentType: 'application/javascript',
+        data: {
+            Id: Id,
+            FirstName: FirstName,
+            LastName: LastName,
+            Gender: Gender,
+            IdentificationType: IdentificationType,
+            Identification: Identification,
+            CityId: CityId,
+            Avatar: Avatar,
+            TermsUse: TermsUse,
+            Privacy: Privacy,
+            BirthDate: BirthDate,
+            HomeAddress: HomeAddress,
+            OfficeAddress: OfficeAddress,
+            MovilePhone: MovilePhone,
+            OfficePhone: OfficePhone,
+            HomePhone: HomePhone,
+            OccupationId: OccupationId,
+            TermsUse: TermsUse,
+            Privacy: Privacy
+        },
+        success: function (result) {
+            if (!updateImage) {
+                $("#divMessageInfo").html("");
+                $("#divMessageInfo").html('<div class="column"><div id="mesaggeDataUser" data-alert class="alert-box info">Información de usuario actualizada satisfactoriamente<a href="javascript:closeMessage(\'mesaggeDataUser\');" class="close">&times;</a></div></div>');
+                $(document).foundation();
+                //Habilitar botón
+                enableButton("btnUpdateUser");
+            }
+            else {
+                //Actualizar imagen
+                $("#imgExistingUser").attr("src", pathIamgesUser + Avatar);
+                $("#divMessageImage").empty();
+                $("#divMessageImage").html('<div class="column"><div id="mesaggeImageUser" data-alert class="alert-box info">Imagen actualizada<a href="javascript:closeMessage(\'mesaggeImageUser\');" class="close">&times;</a></div></div>');
+                $(document).foundation();
+                //Habilitar botón
+                enableButton("btnImagenUser");
+            }
+        },
+        error: function (result) {
+            console.log(result.error);
+        }
+    });
+}
+
+function confirmIscription() {
+    ValidateFormRegister();
+    if (!validateLogin) {
+        //$("#MessageRegisterUser").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box warning">Los campos con (*) son obligatorios<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+        enableButton("regsubmit");
+    }
+    else {
+        if (agreeTerms()) {
+            $('#confirmInscription').removeAttr("hidden");
+            $('#confirmInscription').foundation('reveal', 'open');
+            $('#registroModal').attr("hidden", "");
+
+            var nameRegister = $("#nameRegister").val();
+            var usernameRegister = $("#usernameRegister").val();
+            $("#nameRegisterConfirm").text(nameRegister);
+            $("#usernameRegisterConfirm").text(usernameRegister);
+            $("#MessageRegisterUser2").html('');
+            $("#MessageRegisterNews1").html('');
+            $("#MessageRegisterNews2").html('');
+        }
+    }
+}
+function changeEmailIscription() {
+    $('#registroModal').removeAttr("hidden");
+    $('#registroModal').foundation('reveal', 'open');
+    $('#confirmInscription').attr("hidden", "");
+    bloquearFormulario(document.getElementsByClassName("FormRegisterModal")[0], 1);
+    $('#usernameRegister').removeAttr("disabled");
+}
+
+function ConfirmAndAddIscription() {
+    $('#registroModal').removeAttr("hidden");
+    $('#registroModal').foundation('reveal', 'close');
+    $('#confirmInscription').removeAttr("hidden");
+    $('#confirmInscription').foundation('reveal', 'close');
+    var Id = $("#ThisId").val();
+    var IdProvider = 4; //1	Facebook  | 2	Twitter  | 3	Google   | 4	Site
+    var Password = $("#passwordRegister").val();
+    var UserName = $("#usernameRegister").val();
+    GetUserWeb(UserName, Password, IdProvider, UserName)
+}
+
+function reConfirmAndAddIscription() {
+    $('#registroModal').removeAttr("hidden");
+    $('#registroModal').foundation('reveal', 'close');
+    $('#confirmInscription').removeAttr("hidden");
+    $('#confirmInscription').foundation('reveal', 'close');
+
+    var Avatar = null;
+    var BirthDate = null;
+    var Email = $("#usernameRegister").val();
+    var FirstName = $("#nameRegister").val();
+    var Gender = null;
+    var IdProvider = 4; //1	Facebook  | 2	Twitter  | 3	Google   | 4	Site
+    var LastName = $("#lastName").val();
+    var Password = $("#passwordRegister").val();
+    var UserName = $("#usernameRegister").val();
+    var token = $("#token").val();
+    var Id = $("#ThisId").val();
+    SendMail(1, $("#MailerUrl").val(), Email, 'webmaster@semana.com', '', '', 'Confirmación de suscripción al portal Dinero.com', location.origin + '/community/ActivateUserState?' + token, FirstName, '', '', '', '', '4')
+    GetUserWeb(Email, Password, IdProvider, Email)
+}
+function ValidateForgotPassword() {
+    //Inicializar validación
+    $("#confirmdiv").html("");
+    validateLogin = true;
+    EmailPasswordRegister("emailForgotPwd");
+
+    if (!validateLogin) {
+        $("#confirmdiv").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box warning">Los campos con (*) son obligatorios<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+    }
+    else {
+        var userName = '';
+        var userEmail = $("#emailForgotPwd").val();
+        ForgotPassword(userName, userEmail);
+    }
+}
+
+function ForgotPassword(userName, email) {
+    var mailerUrl = $("#MailerUrl").val();
+    var irisUrl = GetIrisUrl();
+    $.ajax({
+        type: 'GET',
+        url: '/community/GetUserByEmail',
+        dataType: 'json',
+        contentType: 'application/javascript',
+        data: {
+            Email: email,
+            UserName: userName
+        },
+        success: function (response) {
+            switch (response.Status) {
+                case 1:
+                    //send an email
+                    disableButton("btnForgotPassword");
+                    SendMail(1, mailerUrl, email, 'webmaster@semana.com', '', '', 'Envio de clave portal Dinero.comm', response.Data[0].password, response.Data[0].email, '', '', '', '', '3')
+                    $("#confirmdiv").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box info">Se ha enviado su contraseña al correo ' + email + '<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+                    $('#ConfirmarCorreo').foundation('reveal', 'open');
+                    $('#confirmEmailForgotPwd').text(email);
+                    break;
+                default:
+                    $("#confirmdiv").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box info">Usuario no encontrado. Por favor verifique los datos.<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+            }
+        },
+        error: function (response) {
+            console.log(response.error);
+            $("#confirmdiv").html('<div class="column"><div id="valInfoLogin" data-alert class="alert-box warning">Ha ocurrido un error en el sistema, para reportar este error escríbanos al correo soportenm@semana.com.<a href="javascript:closeMessage(\'valInfoLogin\');" class="close">&times;</a></div></div>');
+            $('.alert-box').addClass('warning');
+            $(document).foundation();
+            $('.alert-box.hide').removeClass('hide');
+            enableButton("btnForgotPassword");
+        }
+    });
+}
+
+/*Password*/
+function executeUpdatePassword() {
+    if ($("#txtCurrentPassword").val() != '' && $("#txtNewPassword").val() != '' && $("#txtConfirmPassword").val() != '') {
+        if ($("#txtNewPassword").val() == $("#txtConfirmPassword").val()) {
+            validatePassword();
+        }
+        else {
+            $("#divMessagePassword").html('<div class="column"><div id="mesaggePassword" data-alert class="alert-box info">Contraseñas nuevas no coinciden.<a href="javascript:closeMessage(\'mesaggePassword\');" class="close">&times;</a></div></div>');
+        }
+    }
+    else {
+        $("#divMessagePassword").html('<div class="column"><div id="mesaggePassword" data-alert class="alert-box info">Verifique el ingreso de: ' +
+                                              '<br> - Contraseña actual.' +
+                                              '<br> - Nueva contraseña.' +
+                                              '<br> - Confirmación nueva contraseña.' +
+                                              '<a href="javascript:closeMessage(\'mesaggePassword\');" class="close">&times;</a></div></div>');
+    }
+}
+
+
+function validatePassword() {
+    disableButton("btnPassword");
+    $.ajax(
+    {
+        type: "POST",
+        url: urlUpdatePw,
+        data: {
+            passwordCurrent: $("#hdPassword").val(),
+            passwordInsert: $("#txtCurrentPassword").val()
+        },
+        success: function (result) {
+            if (result == "OK") {
+                updatePassword();
+            }
+            else {
+                $("#divMessagePassword").html('<div class="column"><div id="mesaggePassword" data-alert class="alert-box info">La contraseña actual ingresada es incorrecta.<a href="javascript:closeMessage(\'mesaggePassword\');" class="close">&times;</a></div></div>');
+                enableButton("btnPassword");
+            }
+        },
+        error: function (result) {
+            console.log;
+        }
+    });
+}
+
+function updatePassword() {
+    //var Url = GetIrisUrl();
+    $.ajax({
+        type: 'GET',
+        url: '/community/password',
+        dataType: 'json',
+        contentType: 'application/javascript',
+        data: {
+            Id: tipoUser,
+            Password: $("#txtNewPassword").val()
+        },
+        success: function (result) {
+            if (result.Message == "OK") {
+                $("#divMessagePassword").html('<div class="column"><div id="mesaggePassword" data-alert class="alert-box success">Contraseña actualizada.<a href="javascript:closeMessage(\'mesaggePassword\');" class="close">&times;</a></div></div>');
+                $("#btnPassword").remove();
+            }
+            else {
+                $("#divMessagePassword").html('<div class="column"><div id="mesaggePassword" data-alert class="alert-box warning">Error al cambiar contraseña.<a href="javascript:closeMessage(\'mesaggePassword\');" class="close">&times;</a></div></div>');
+                enableButton("btnPassword");
+            }
+        },
+        error: function (result) {
+            console.log(result.error);
+        }
+    });
+}
+
+function UpdateTokenUser(id) {
+
+    $.ajax({
+        type: 'POST',
+        url: '/community/UpdateTokenUser',
+        data: {
+            Id: id,
+            IdProvider: 4,
+            IdSite: $("#IdSite").val()
+        },
+        success: function (response) {
+            $("#usernameRegister").val(response.Data["0"].email);
+            $("#nameRegister").val(response.Data["0"].firstName);
+            $("#token").val(response.Data["0"].token);
+            var Email = response.Data["0"].email;
+            var FirstName = response.Data["0"].firstName;
+            var token = response.Data["0"].token;
+            var IdProvider = 4; //1	Facebook  | 2	Twitter  | 3	Google   | 4	Site
+            SendMail(1, $("#MailerUrl").val(), Email, 'webmaster@semana.com', '', '', 'Confirmación de suscripción al portal Dinero.com', location.origin + '/community/ActivateUserState?' + token, FirstName, '', '', '', '', '4')
+            $("#dvValidarCuenta").empty();
+            $("#dvValidarCuenta").append('<center>Se ha enviado un correo a ' + Email + ', por favor revise su bandeja de entrada o la carpeta de Spam.</center>');
+
+        },
+        async: false,
+        error: function (response) {
+            console.log(response.error);
+        }
+    });
+}
